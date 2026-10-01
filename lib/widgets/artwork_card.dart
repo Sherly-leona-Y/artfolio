@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../models/artwork.dart';
+import '../providers/favorites_provider.dart';
 
 class ArtworkCard extends StatelessWidget {
   final String imagePath;
@@ -14,6 +18,13 @@ class ArtworkCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final artwork = Artwork(
+      imagePath: imagePath,
+      title: title,
+      artist: artist,
+      category: '',
+    );
+
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -30,7 +41,6 @@ class ArtworkCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Artwork image
           AspectRatio(
             aspectRatio: 0.82,
             child: Image.asset(
@@ -39,7 +49,6 @@ class ArtworkCard extends StatelessWidget {
             ),
           ),
 
-          // Artwork information
           Padding(
             padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
             child: Row(
@@ -72,10 +81,24 @@ class ArtworkCard extends StatelessWidget {
                   ),
                 ),
 
-                const Icon(
-                  Icons.favorite_border,
-                  size: 21,
-                  color: Color(0xFF8D5A67),
+                Consumer<FavoritesProvider>(
+                  builder: (context, favorites, child) {
+                    final isFavorite = favorites.isFavorite(artwork);
+
+                    return IconButton(
+                      onPressed: () {
+                        favorites.toggleFavorite(artwork);
+                      },
+                      icon: Icon(
+                        isFavorite
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                        color: isFavorite
+                            ? const Color(0xFFC04F70)
+                            : const Color(0xFF8D5A67),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

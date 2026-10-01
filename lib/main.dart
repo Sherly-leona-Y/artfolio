@@ -4,9 +4,16 @@ import 'screens/home_screen.dart';
 import 'screens/explore_screen.dart';
 import 'screens/favorites_screen.dart';
 import 'screens/profile_screen.dart';
+import 'package:provider/provider.dart';
+import 'providers/favorites_provider.dart';
 
 void main() {
-  runApp(const ArtfolioApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => FavoritesProvider(),
+      child: const ArtfolioApp(),
+    ),
+  );
 }
 
 class ArtfolioApp extends StatelessWidget {
