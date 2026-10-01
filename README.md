@@ -1,17 +1,60 @@
-# flutter_application_1
+# Artfolio 🎨
 
-A new Flutter project.
+Artfolio is a responsive digital art discovery and portfolio application built with Flutter and Dart.
 
-## Getting Started
+It provides a visually focused platform where users can explore artwork, search and filter collections, save favorites, view artwork details, and edit a creator profile.
 
-This project is a starting point for a Flutter application.
+## ✨ Features
 
-A few resources to get you started if this is your first Flutter project:
+- 🏠 Art discovery home page
+- 🔎 Artwork search
+- 🏷️ Category-based artwork filtering
+- ❤️ Add/remove artwork from favorites
+- 🖼️ Artwork detail pages
+- 👤 Editable artist profile
+- 📝 Form validation
+- 🌐 REST API integration
+- ⏳ API loading and error states
+- ✨ Animated favorite interactions
+- 📱 Responsive artwork grid
+- 🎨 Centralized application theme
+- 🧪 Automated Provider test
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## 🛠️ Technologies Used
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Flutter
+- Dart
+- Material 3
+- Provider
+- REST API
+- JSON
+- Git & GitHub
+
+## 📂 Project Structure
+
+```text
+lib/
+├── main.dart
+├── models/
+│   └── artwork.dart
+├── providers/
+│   └── favorites_provider.dart
+├── screens/
+│   ├── home_screen.dart
+│   ├── explore_screen.dart
+│   ├── favorites_screen.dart
+│   ├── profile_screen.dart
+│   ├── artwork_details_screen.dart
+│   └── edit_profile_screen.dart
+├── services/
+│   └── quote_service.dart
+├── theme/
+│   └── art_theme.dart
+└── widgets/
+    └── artwork_card.dart
+
+assets/
+└── images/
+
+test/
+└── widget_test.dart

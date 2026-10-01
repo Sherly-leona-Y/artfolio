@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import '../services/quote_service.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
+
+  final QuoteService quoteService = QuoteService();
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +76,7 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 30),
 
+            // Search bar
             Container(
               height: 54,
               decoration: BoxDecoration(
@@ -103,6 +107,7 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 38),
 
+            // Featured heading
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -128,6 +133,7 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 14),
 
+            // Featured artwork
             Container(
               height: 300,
               width: double.infinity,
@@ -203,8 +209,83 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
 
+            // API section
             const SizedBox(height: 38),
 
+            const Text(
+              'A little inspiration',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF302326),
+              ),
+            ),
+
+            const SizedBox(height: 14),
+
+            FutureBuilder<String>(
+              future: quoteService.fetchQuote(),
+              builder: (context, snapshot) {
+                // Loading state
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Container(
+                    width: double.infinity,
+                    height: 110,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF4E5E7),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: const Center(
+                      child: CircularProgressIndicator(
+                        color: Color(0xFFC04F70),
+                      ),
+                    ),
+                  );
+                }
+
+                // Error state
+                if (snapshot.hasError) {
+                  return Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF4E5E7),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: const Text(
+                      'Could not load inspiration. Please try again later.',
+                      style: TextStyle(
+                        color: Color(0xFF806F73),
+                        fontSize: 14,
+                      ),
+                    ),
+                  );
+                }
+
+                // Success state
+                return Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(22),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF3B292C),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    '"${snapshot.data}"',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      height: 1.5,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                );
+              },
+            ),
+
+            const SizedBox(height: 38),
+
+            // Explore by mood
             const Text(
               'Explore by mood',
               style: TextStyle(
@@ -232,6 +313,7 @@ class HomeScreen extends StatelessWidget {
 
             const SizedBox(height: 38),
 
+            // Trending artists
             const Text(
               'Trending artists',
               style: TextStyle(

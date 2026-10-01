@@ -1,30 +1,32 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:flutter_application_1/main.dart';
+import 'package:artfolio/models/artwork.dart';
+import 'package:artfolio/providers/favorites_provider.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  test('FavoritesProvider toggles favorites correctly', () {
+    final provider = FavoritesProvider();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    const artwork = Artwork(
+      imagePath: 'assets/images/pink1.jpg',
+      title: 'Pink Dreams',
+      artist: 'Maya Chen',
+      category: 'Digital',
+    );
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    // Initially there should be no favorites.
+    expect(provider.favorites, isEmpty);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Add artwork to favorites.
+    provider.toggleFavorite(artwork);
+
+    expect(provider.favorites.length, 1);
+    expect(provider.isFavorite(artwork), true);
+
+    // Remove artwork from favorites.
+    provider.toggleFavorite(artwork);
+
+    expect(provider.favorites, isEmpty);
+    expect(provider.isFavorite(artwork), false);
   });
 }

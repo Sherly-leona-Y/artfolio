@@ -59,11 +59,12 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int selectedIndex = 0;
 
-  final List<Widget> screens = const [
+  // HomeScreen is not const because it contains the QuoteService.
+  final List<Widget> screens = [
     HomeScreen(),
-    ExploreScreen(),
-    FavoritesScreen(),
-    ProfileScreen(),
+    const ExploreScreen(),
+    const FavoritesScreen(),
+    const ProfileScreen(),
   ];
 
   @override

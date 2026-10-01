@@ -83,18 +83,28 @@ class ArtworkCard extends StatelessWidget {
                       final isFavorite = favorites.isFavorite(artwork);
 
                       return IconButton(
-                        onPressed: () {
-                          favorites.toggleFavorite(artwork);
-                        },
-                        icon: Icon(
-                          isFavorite
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                          color: isFavorite
-                              ? const Color(0xFFC04F70)
-                              : const Color(0xFF8D5A67),
-                        ),
-                      );
+  onPressed: () {
+    favorites.toggleFavorite(artwork);
+  },
+  icon: AnimatedSwitcher(
+    duration: const Duration(milliseconds: 250),
+    transitionBuilder: (child, animation) {
+      return ScaleTransition(
+        scale: animation,
+        child: child,
+      );
+    },
+    child: Icon(
+      isFavorite
+          ? Icons.favorite
+          : Icons.favorite_border,
+      key: ValueKey(isFavorite),
+      color: isFavorite
+          ? const Color(0xFFC04F70)
+          : const Color(0xFF8D5A67),
+    ),
+  ),
+);
                     },
                   ),
                 ],
