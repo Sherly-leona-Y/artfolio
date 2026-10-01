@@ -5,26 +5,15 @@ import '../models/artwork.dart';
 import '../providers/favorites_provider.dart';
 
 class ArtworkCard extends StatelessWidget {
-  final String imagePath;
-  final String title;
-  final String artist;
+  final Artwork artwork;
 
   const ArtworkCard({
     super.key,
-    required this.imagePath,
-    required this.title,
-    required this.artist,
+    required this.artwork,
   });
 
   @override
   Widget build(BuildContext context) {
-    final artwork = Artwork(
-      imagePath: imagePath,
-      title: title,
-      artist: artist,
-      category: '',
-    );
-
     return GestureDetector(
       onTap: () {
         Navigator.pushNamed(
@@ -52,7 +41,7 @@ class ArtworkCard extends StatelessWidget {
             AspectRatio(
               aspectRatio: 0.82,
               child: Image.asset(
-                imagePath,
+                artwork.imagePath,
                 fit: BoxFit.cover,
               ),
             ),
@@ -66,7 +55,7 @@ class ArtworkCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          title,
+                          artwork.title,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
@@ -77,7 +66,7 @@ class ArtworkCard extends StatelessWidget {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'by $artist',
+                          'by ${artwork.artist}',
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(

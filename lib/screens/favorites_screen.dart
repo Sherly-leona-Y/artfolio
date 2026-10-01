@@ -101,10 +101,8 @@ class FavoritesScreen extends StatelessWidget {
                       final artwork = favorites[index];
 
                       return ArtworkCard(
-                        imagePath: artwork.imagePath,
-                        title: artwork.title,
-                        artist: artwork.artist,
-                      );
+  artwork: artwork,
+);
                     },
                   );
                 },

@@ -277,10 +277,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     final artwork = filteredArtworks[index];
 
                     return ArtworkCard(
-                      imagePath: artwork.imagePath,
-                      title: artwork.title,
-                      artist: artwork.artist,
-                    );
+  artwork: artwork,
+);
                   },
                 );
               },

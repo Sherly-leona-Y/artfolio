@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import '../models/artwork.dart';
+import '../providers/favorites_provider.dart';
 
 class ArtworkDetailsScreen extends StatelessWidget {
   final Artwork artwork;
@@ -13,6 +16,7 @@ class ArtworkDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F6F2),
+
       appBar: AppBar(
         backgroundColor: const Color(0xFFF8F6F2),
         elevation: 0,
@@ -31,6 +35,7 @@ class ArtworkDetailsScreen extends StatelessWidget {
           ),
         ),
       ),
+
       body: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(24, 10, 24, 40),
         child: Column(
@@ -95,6 +100,7 @@ class ArtworkDetailsScreen extends StatelessWidget {
 
             const SizedBox(height: 24),
 
+            // About section
             const Text(
               'About this artwork',
               style: TextStyle(
@@ -120,22 +126,38 @@ class ArtworkDetailsScreen extends StatelessWidget {
             const SizedBox(height: 28),
 
             // Favorite button
-            SizedBox(
-              width: double.infinity,
-              height: 54,
-              child: ElevatedButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.favorite_border),
-                label: const Text('Add to Favorites'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF3B292C),
-                  foregroundColor: Colors.white,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+            Consumer<FavoritesProvider>(
+              builder: (context, favorites, child) {
+                final isFavorite = favorites.isFavorite(artwork);
+
+                return SizedBox(
+                  width: double.infinity,
+                  height: 54,
+                  child: ElevatedButton.icon(
+                    onPressed: () {
+                      favorites.toggleFavorite(artwork);
+                    },
+                    icon: Icon(
+                      isFavorite
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                    ),
+                    label: Text(
+                      isFavorite
+                          ? 'Remove from Favorites'
+                          : 'Add to Favorites',
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF3B292C),
+                      foregroundColor: Colors.white,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           ],
         ),
