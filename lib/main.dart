@@ -1,121 +1,466 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ArtfolioApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class ArtfolioApp extends StatelessWidget {
+  const ArtfolioApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      title: 'Artfolio',
+
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+        scaffoldBackgroundColor: const Color(0xFFF8F6F2),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF6D5A4D),
+        ),
+        fontFamily: 'Arial',
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+
+      home: const MainScreen(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _MainScreenState extends State<MainScreen> {
+  int selectedIndex = 0;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  final List<Widget> screens = const [
+    HomeScreen(),
+    ExploreScreen(),
+    FavoritesScreen(),
+    ProfileScreen(),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+      body: screens[selectedIndex],
+
+      bottomNavigationBar: NavigationBar(
+        selectedIndex: selectedIndex,
+
+        onDestinationSelected: (index) {
+          setState(() {
+            selectedIndex = index;
+          });
+        },
+
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.explore_outlined),
+            selectedIcon: Icon(Icons.explore),
+            label: 'Explore',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.favorite_outline),
+            selectedIcon: Icon(Icons.favorite),
+            label: 'Favorites',
+          ),
+          NavigationDestination(
+            icon: Icon(Icons.person_outline),
+            selectedIcon: Icon(Icons.person),
+            label: 'Profile',
+          ),
+        ],
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
+    );
+  }
+}
+
+// ---------------- HOME ----------------
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(24, 20, 24, 30),
         child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: .center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+
+            // Top bar
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'ARTFOLIO',
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: 3,
+                  ),
+                ),
+
+                Container(
+                  width: 42,
+                  height: 42,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF2D2D8),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: const Icon(
+                    Icons.favorite_border,
+                    color: Color(0xFF3B292C),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 45),
+
+            // Hero heading
+            const Text(
+              'Discover',
+              style: TextStyle(
+                fontSize: 48,
+                height: 1,
+                fontWeight: FontWeight.w300,
+                color: Color(0xFF302326),
+              ),
+            ),
+
+            const Text(
+              'the art you feel.',
+              style: TextStyle(
+                fontSize: 48,
+                height: 1.05,
+                fontWeight: FontWeight.w800,
+                color: Color(0xFF302326),
+              ),
+            ),
+
+            const SizedBox(height: 18),
+
+            const Text(
+              'A little corner of the internet for beautiful things.',
+              style: TextStyle(
+                fontSize: 15,
+                height: 1.5,
+                color: Color(0xFF756568),
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
+            // Search bar
+            Container(
+              height: 54,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(
+                  color: const Color(0xFFE8DADD),
+                ),
+              ),
+              child: const Row(
+                children: [
+                  SizedBox(width: 18),
+                  Icon(
+                    Icons.search,
+                    color: Color(0xFF806F73),
+                  ),
+                  SizedBox(width: 12),
+                  Text(
+                    'Search artwork, artists...',
+                    style: TextStyle(
+                      color: Color(0xFF9A898D),
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 38),
+
+            // Section title
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Featured',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF302326),
+                  ),
+                ),
+
+                TextButton(
+                  onPressed: () {},
+                  child: const Text(
+                    'See all',
+                    style: TextStyle(
+                      color: Color(0xFF9D5263),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 14),
+
+            // Featured artwork
+            Container(
+              height: 300,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(26),
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFFF2A6B9),
+                    Color(0xFFD46A8A),
+                    Color(0xFF6D394B),
+                  ],
+                ),
+              ),
+              child: Stack(
+                children: [
+                  const Positioned(
+                    top: 24,
+                    left: 24,
+                    child: Text(
+                      'FEATURED ART',
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 11,
+                        letterSpacing: 2,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+
+                  const Positioned(
+                    left: 24,
+                    bottom: 25,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Dreams in Pink',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 26,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        SizedBox(height: 5),
+                        Text(
+                          'by Maya Chen',
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  Positioned(
+                    right: 20,
+                    top: 20,
+                    child: Container(
+                      width: 42,
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.favorite_border,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 38),
+
+            const Text(
+              'Explore by mood',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF302326),
+              ),
+            ),
+
+            const SizedBox(height: 16),
+
+            // Category chips
+            SizedBox(
+              height: 44,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                children: [
+                  _categoryChip('Dreamy', true),
+                  _categoryChip('Minimal', false),
+                  _categoryChip('Retro', false),
+                  _categoryChip('Bold', false),
+                  _categoryChip('Nature', false),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 38),
+
+            const Text(
+              'Trending artists',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF302326),
+              ),
+            ),
+
+            const SizedBox(height: 18),
+
+            Row(
+              children: [
+                _artistAvatar('M', 'Maya'),
+                const SizedBox(width: 24),
+                _artistAvatar('A', 'Aria'),
+                const SizedBox(width: 24),
+                _artistAvatar('L', 'Lena'),
+                const SizedBox(width: 24),
+                _artistAvatar('N', 'Noah'),
+              ],
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+    );
+  }
+
+  Widget _categoryChip(String text, bool selected) {
+    return Container(
+      margin: const EdgeInsets.only(right: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      decoration: BoxDecoration(
+        color: selected
+            ? const Color(0xFF3B292C)
+            : const Color(0xFFF4E5E7),
+        borderRadius: BorderRadius.circular(30),
+      ),
+      alignment: Alignment.center,
+      child: Text(
+        text,
+        style: TextStyle(
+          color: selected
+              ? Colors.white
+              : const Color(0xFF6E555A),
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
+
+  Widget _artistAvatar(String letter, String name) {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 28,
+          backgroundColor: const Color(0xFFF2C9D1),
+          child: Text(
+            letter,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              color: Color(0xFF6D394B),
+            ),
+          ),
+        ),
+        const SizedBox(height: 7),
+        Text(
+          name,
+          style: const TextStyle(
+            fontSize: 12,
+            color: Color(0xFF5E4D51),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ---------------- EXPLORE ----------------
+
+class ExploreScreen extends StatelessWidget {
+  const ExploreScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text(
+        'Explore Artwork',
+        style: TextStyle(
+          fontSize: 28,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------- FAVORITES ----------------
+
+class FavoritesScreen extends StatelessWidget {
+  const FavoritesScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text(
+        'Your Favorites',
+        style: TextStyle(
+          fontSize: 28,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------- PROFILE ----------------
+
+class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Text(
+        'Your Profile',
+        style: TextStyle(
+          fontSize: 28,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
