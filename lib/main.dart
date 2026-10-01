@@ -8,6 +8,7 @@ import 'screens/home_screen.dart';
 import 'screens/explore_screen.dart';
 import 'screens/favorites_screen.dart';
 import 'screens/profile_screen.dart';
+import 'theme/art_theme.dart';
 
 void main() {
   runApp(
@@ -27,14 +28,8 @@ class ArtfolioApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Artfolio',
 
-      theme: ThemeData(
-        useMaterial3: true,
-        scaffoldBackgroundColor: const Color(0xFFF8F6F2),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF6D5A4D),
-        ),
-        fontFamily: 'Arial',
-      ),
+      // Centralized Artfolio theme
+      theme: AppTheme.lightTheme,
 
       // Main application screen
       home: const MainScreen(),
@@ -91,19 +86,16 @@ class _MainScreenState extends State<MainScreen> {
             selectedIcon: Icon(Icons.home),
             label: 'Home',
           ),
-
           NavigationDestination(
             icon: Icon(Icons.explore_outlined),
             selectedIcon: Icon(Icons.explore),
             label: 'Explore',
           ),
-
           NavigationDestination(
             icon: Icon(Icons.favorite_outline),
             selectedIcon: Icon(Icons.favorite),
             label: 'Favorites',
           ),
-
           NavigationDestination(
             icon: Icon(Icons.person_outline),
             selectedIcon: Icon(Icons.person),
