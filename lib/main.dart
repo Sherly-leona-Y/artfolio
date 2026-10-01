@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'models/artwork.dart';
+import 'providers/favorites_provider.dart';
+import 'screens/artwork_details_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/explore_screen.dart';
 import 'screens/favorites_screen.dart';
 import 'screens/profile_screen.dart';
-import 'package:provider/provider.dart';
-import 'providers/favorites_provider.dart';
 
 void main() {
   runApp(
@@ -24,6 +26,7 @@ class ArtfolioApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Artfolio',
+
       theme: ThemeData(
         useMaterial3: true,
         scaffoldBackgroundColor: const Color(0xFFF8F6F2),
@@ -32,7 +35,21 @@ class ArtfolioApp extends StatelessWidget {
         ),
         fontFamily: 'Arial',
       ),
+
+      // Main application screen
       home: const MainScreen(),
+
+      // Named routes
+      routes: {
+        '/artwork-details': (context) {
+          final artwork =
+              ModalRoute.of(context)!.settings.arguments as Artwork;
+
+          return ArtworkDetailsScreen(
+            artwork: artwork,
+          );
+        },
+      },
     );
   }
 }
@@ -58,29 +75,35 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: screens[selectedIndex],
+
       bottomNavigationBar: NavigationBar(
         selectedIndex: selectedIndex,
+
         onDestinationSelected: (index) {
           setState(() {
             selectedIndex = index;
           });
         },
+
         destinations: const [
           NavigationDestination(
             icon: Icon(Icons.home_outlined),
             selectedIcon: Icon(Icons.home),
             label: 'Home',
           ),
+
           NavigationDestination(
             icon: Icon(Icons.explore_outlined),
             selectedIcon: Icon(Icons.explore),
             label: 'Explore',
           ),
+
           NavigationDestination(
             icon: Icon(Icons.favorite_outline),
             selectedIcon: Icon(Icons.favorite),
             label: 'Favorites',
           ),
+
           NavigationDestination(
             icon: Icon(Icons.person_outline),
             selectedIcon: Icon(Icons.person),
