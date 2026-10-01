@@ -8,20 +8,25 @@ class ExploreScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.fromLTRB(24, 20, 24, 30),
+        padding: const EdgeInsets.fromLTRB(24, 20, 24, 40),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // ─────────────────────────────────────
+            // HEADER
+            // ─────────────────────────────────────
+
             const Text(
               'Explore',
               style: TextStyle(
                 fontSize: 42,
                 fontWeight: FontWeight.w800,
                 color: Color(0xFF302326),
+                height: 1,
               ),
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 10),
 
             const Text(
               'Find something that speaks to you.',
@@ -31,11 +36,14 @@ class ExploreScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 26),
+            const SizedBox(height: 28),
 
-            // Search bar
+            // ─────────────────────────────────────
+            // SEARCH BAR
+            // ─────────────────────────────────────
+
             Container(
-              height: 54,
+              height: 56,
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(18),
@@ -46,14 +54,19 @@ class ExploreScreen extends StatelessWidget {
               child: const Row(
                 children: [
                   SizedBox(width: 18),
+
                   Icon(
                     Icons.search,
+                    size: 22,
                     color: Color(0xFF806F73),
                   ),
+
                   SizedBox(width: 12),
+
                   Text(
                     'Search artwork or artists...',
                     style: TextStyle(
+                      fontSize: 14,
                       color: Color(0xFF9A898D),
                     ),
                   ),
@@ -61,9 +74,23 @@ class ExploreScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 26),
+            const SizedBox(height: 30),
 
-            // Categories
+            // ─────────────────────────────────────
+            // CATEGORY FILTERS
+            // ─────────────────────────────────────
+
+            const Text(
+              'Categories',
+              style: TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w700,
+                color: Color(0xFF302326),
+              ),
+            ),
+
+            const SizedBox(height: 14),
+
             SizedBox(
               height: 42,
               child: ListView(
@@ -74,63 +101,106 @@ class ExploreScreen extends StatelessWidget {
                   _category('Illustration', false),
                   _category('3D', false),
                   _category('Photography', false),
+                  _category('Pixel Art', false),
                 ],
               ),
             ),
 
-            const SizedBox(height: 30),
+            const SizedBox(height: 34),
 
-            const Text(
-              'Trending',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.w700,
-                color: Color(0xFF302326),
-              ),
+            // ─────────────────────────────────────
+            // TRENDING HEADER
+            // ─────────────────────────────────────
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Trending',
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF302326),
+                  ),
+                ),
+
+                TextButton(
+                  onPressed: () {},
+                  child: const Text(
+                    'See all',
+                    style: TextStyle(
+                      color: Color(0xFF9D5263),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
             ),
 
             const SizedBox(height: 18),
 
-            // Artwork grid
-            GridView.count(
-              crossAxisCount: 2,
-              crossAxisSpacing: 14,
-              mainAxisSpacing: 18,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              childAspectRatio: 0.68,
-              children: const [
-                ArtworkCard(
-                  imagePath: 'assets/images/pink1.jpg',
-                  title: 'Pink Dreams',
-                  artist: 'Maya Chen',
-                ),
-                ArtworkCard(
-                  imagePath: 'assets/images/pink2.jpg',
-                  title: 'After Midnight',
-                  artist: 'Aria Kim',
-                ),
-                ArtworkCard(
-                  imagePath: 'assets/images/pink3.jpg',
-                  title: 'Cloud Garden',
-                  artist: 'Lena Rose',
-                ),
-                ArtworkCard(
-                  imagePath: 'assets/images/pink4.jpg',
-                  title: 'Glass Wings',
-                  artist: 'Noah Lee',
-                ),
-                ArtworkCard(
-                  imagePath: 'assets/images/pink5.jpg',
-                  title: 'Retro Bloom',
-                  artist: 'Mia Park',
-                ),
-                ArtworkCard(
-                  imagePath: 'assets/images/pink6.jpg',
-                  title: 'Pink Horizon',
-                  artist: 'Sora Moon',
-                ),
-              ],
+            // ─────────────────────────────────────
+            // RESPONSIVE ARTWORK GRID
+            // ─────────────────────────────────────
+
+            LayoutBuilder(
+              builder: (context, constraints) {
+                int columns;
+
+                if (constraints.maxWidth < 600) {
+                  columns = 2;
+                } else if (constraints.maxWidth < 1000) {
+                  columns = 3;
+                } else {
+                  columns = 4;
+                }
+
+                return GridView.count(
+                  crossAxisCount: columns,
+                  crossAxisSpacing: 18,
+                  mainAxisSpacing: 20,
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  childAspectRatio: 0.68,
+                  children: const [
+                    ArtworkCard(
+                      imagePath: 'assets/images/pink1.jpg',
+                      title: 'Pink Dreams',
+                      artist: 'Maya Chen',
+                    ),
+
+                    ArtworkCard(
+                      imagePath: 'assets/images/pink2.jpg',
+                      title: 'After Midnight',
+                      artist: 'Aria Kim',
+                    ),
+
+                    ArtworkCard(
+                      imagePath: 'assets/images/pink3.jpg',
+                      title: 'Cloud Garden',
+                      artist: 'Lena Rose',
+                    ),
+
+                    ArtworkCard(
+                      imagePath: 'assets/images/pink4.jpg',
+                      title: 'Glass Wings',
+                      artist: 'Noah Lee',
+                    ),
+
+                    ArtworkCard(
+                      imagePath: 'assets/images/pink5.jpg',
+                      title: 'Retro Bloom',
+                      artist: 'Mia Park',
+                    ),
+
+                    ArtworkCard(
+                      imagePath: 'assets/images/pink6.jpg',
+                      title: 'Pink Horizon',
+                      artist: 'Sora Moon',
+                    ),
+                  ],
+                );
+              },
             ),
           ],
         ),
@@ -138,10 +208,14 @@ class ExploreScreen extends StatelessWidget {
     );
   }
 
+  // ─────────────────────────────────────────────
+  // CATEGORY CHIP
+  // ─────────────────────────────────────────────
+
   Widget _category(String text, bool selected) {
     return Container(
       margin: const EdgeInsets.only(right: 10),
-      padding: const EdgeInsets.symmetric(horizontal: 18),
+      padding: const EdgeInsets.symmetric(horizontal: 19),
       decoration: BoxDecoration(
         color: selected
             ? const Color(0xFF3B292C)
@@ -156,7 +230,7 @@ class ExploreScreen extends StatelessWidget {
               ? Colors.white
               : const Color(0xFF6E555A),
           fontSize: 13,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w600,
         ),
       ),
     );
