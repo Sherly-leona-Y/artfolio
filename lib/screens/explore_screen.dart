@@ -1,21 +1,98 @@
 import 'package:flutter/material.dart';
+
+import '../models/artwork.dart';
 import '../widgets/artwork_card.dart';
 
-class ExploreScreen extends StatelessWidget {
+class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key});
 
   @override
+  State<ExploreScreen> createState() => _ExploreScreenState();
+}
+
+class _ExploreScreenState extends State<ExploreScreen> {
+  final TextEditingController searchController = TextEditingController();
+
+  String selectedCategory = 'All';
+
+  final List<Artwork> artworks = const [
+    Artwork(
+      imagePath: 'assets/images/pink1.jpg',
+      title: 'Pink Dreams',
+      artist: 'Maya Chen',
+      category: 'Digital',
+    ),
+    Artwork(
+      imagePath: 'assets/images/pink2.jpg',
+      title: 'After Midnight',
+      artist: 'Aria Kim',
+      category: 'Illustration',
+    ),
+    Artwork(
+      imagePath: 'assets/images/pink3.jpg',
+      title: 'Cloud Garden',
+      artist: 'Lena Rose',
+      category: 'Photography',
+    ),
+    Artwork(
+      imagePath: 'assets/images/pink4.jpg',
+      title: 'Glass Wings',
+      artist: 'Noah Lee',
+      category: '3D',
+    ),
+    Artwork(
+      imagePath: 'assets/images/pink5.jpg',
+      title: 'Retro Bloom',
+      artist: 'Mia Park',
+      category: 'Pixel Art',
+    ),
+    Artwork(
+      imagePath: 'assets/images/pink6.jpg',
+      title: 'Pink Horizon',
+      artist: 'Sora Moon',
+      category: 'Digital',
+    ),
+  ];
+
+  List<Artwork> get filteredArtworks {
+    final query = searchController.text.toLowerCase();
+
+    return artworks.where((artwork) {
+      final matchesSearch =
+          artwork.title.toLowerCase().contains(query) ||
+          artwork.artist.toLowerCase().contains(query);
+
+      final matchesCategory =
+          selectedCategory == 'All' ||
+          artwork.category == selectedCategory;
+
+      return matchesSearch && matchesCategory;
+    }).toList();
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    const categories = [
+      'All',
+      'Digital',
+      'Illustration',
+      '3D',
+      'Photography',
+      'Pixel Art',
+    ];
+
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(24, 20, 24, 40),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ─────────────────────────────────────
-            // HEADER
-            // ─────────────────────────────────────
-
             const Text(
               'Explore',
               style: TextStyle(
@@ -38,47 +115,52 @@ class ExploreScreen extends StatelessWidget {
 
             const SizedBox(height: 28),
 
-            // ─────────────────────────────────────
-            // SEARCH BAR
-            // ─────────────────────────────────────
-
-            Container(
-              height: 56,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(18),
-                border: Border.all(
-                  color: const Color(0xFFE8DADD),
+            // Search bar
+            TextField(
+              controller: searchController,
+              onChanged: (value) {
+                setState(() {});
+              },
+              decoration: InputDecoration(
+                hintText: 'Search artwork or artists...',
+                prefixIcon: const Icon(
+                  Icons.search,
+                  color: Color(0xFF806F73),
                 ),
-              ),
-              child: const Row(
-                children: [
-                  SizedBox(width: 18),
-
-                  Icon(
-                    Icons.search,
-                    size: 22,
-                    color: Color(0xFF806F73),
+                suffixIcon: searchController.text.isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          searchController.clear();
+                          setState(() {});
+                        },
+                      )
+                    : null,
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(18),
+                  borderSide: const BorderSide(
+                    color: Color(0xFFE8DADD),
                   ),
-
-                  SizedBox(width: 12),
-
-                  Text(
-                    'Search artwork or artists...',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFF9A898D),
-                    ),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(18),
+                  borderSide: const BorderSide(
+                    color: Color(0xFFE8DADD),
                   ),
-                ],
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(18),
+                  borderSide: const BorderSide(
+                    color: Color(0xFFB76E79),
+                    width: 1.5,
+                  ),
+                ),
               ),
             ),
 
             const SizedBox(height: 30),
-
-            // ─────────────────────────────────────
-            // CATEGORY FILTERS
-            // ─────────────────────────────────────
 
             const Text(
               'Categories',
@@ -95,22 +177,23 @@ class ExploreScreen extends StatelessWidget {
               height: 42,
               child: ListView(
                 scrollDirection: Axis.horizontal,
-                children: [
-                  _category('All', true),
-                  _category('Digital', false),
-                  _category('Illustration', false),
-                  _category('3D', false),
-                  _category('Photography', false),
-                  _category('Pixel Art', false),
-                ],
+                children: categories.map((category) {
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        selectedCategory = category;
+                      });
+                    },
+                    child: _category(
+                      category,
+                      selectedCategory == category,
+                    ),
+                  );
+                }).toList(),
               ),
             ),
 
             const SizedBox(height: 34),
-
-            // ─────────────────────────────────────
-            // TRENDING HEADER
-            // ─────────────────────────────────────
 
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -123,25 +206,17 @@ class ExploreScreen extends StatelessWidget {
                     color: Color(0xFF302326),
                   ),
                 ),
-
-                TextButton(
-                  onPressed: () {},
-                  child: const Text(
-                    'See all',
-                    style: TextStyle(
-                      color: Color(0xFF9D5263),
-                      fontWeight: FontWeight.w600,
-                    ),
+                Text(
+                  '${filteredArtworks.length} artworks',
+                  style: const TextStyle(
+                    color: Color(0xFF9D5263),
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ],
             ),
 
             const SizedBox(height: 18),
-
-            // ─────────────────────────────────────
-            // RESPONSIVE ARTWORK GRID
-            // ─────────────────────────────────────
 
             LayoutBuilder(
               builder: (context, constraints) {
@@ -155,50 +230,58 @@ class ExploreScreen extends StatelessWidget {
                   columns = 4;
                 }
 
-                return GridView.count(
-                  crossAxisCount: columns,
-                  crossAxisSpacing: 18,
-                  mainAxisSpacing: 20,
+                if (filteredArtworks.isEmpty) {
+                  return const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 60),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.search_off,
+                            size: 50,
+                            color: Color(0xFFB79CA2),
+                          ),
+                          SizedBox(height: 12),
+                          Text(
+                            'No artwork found',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w700,
+                              color: Color(0xFF302326),
+                            ),
+                          ),
+                          SizedBox(height: 6),
+                          Text(
+                            'Try another search or category.',
+                            style: TextStyle(
+                              color: Color(0xFF806F73),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+
+                return GridView.builder(
+                  itemCount: filteredArtworks.length,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
-                  childAspectRatio: 0.68,
-                  children: const [
-                    ArtworkCard(
-                      imagePath: 'assets/images/pink1.jpg',
-                      title: 'Pink Dreams',
-                      artist: 'Maya Chen',
-                    ),
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: columns,
+                    crossAxisSpacing: 18,
+                    mainAxisSpacing: 20,
+                    childAspectRatio: 0.68,
+                  ),
+                  itemBuilder: (context, index) {
+                    final artwork = filteredArtworks[index];
 
-                    ArtworkCard(
-                      imagePath: 'assets/images/pink2.jpg',
-                      title: 'After Midnight',
-                      artist: 'Aria Kim',
-                    ),
-
-                    ArtworkCard(
-                      imagePath: 'assets/images/pink3.jpg',
-                      title: 'Cloud Garden',
-                      artist: 'Lena Rose',
-                    ),
-
-                    ArtworkCard(
-                      imagePath: 'assets/images/pink4.jpg',
-                      title: 'Glass Wings',
-                      artist: 'Noah Lee',
-                    ),
-
-                    ArtworkCard(
-                      imagePath: 'assets/images/pink5.jpg',
-                      title: 'Retro Bloom',
-                      artist: 'Mia Park',
-                    ),
-
-                    ArtworkCard(
-                      imagePath: 'assets/images/pink6.jpg',
-                      title: 'Pink Horizon',
-                      artist: 'Sora Moon',
-                    ),
-                  ],
+                    return ArtworkCard(
+                      imagePath: artwork.imagePath,
+                      title: artwork.title,
+                      artist: artwork.artist,
+                    );
+                  },
                 );
               },
             ),
@@ -207,10 +290,6 @@ class ExploreScreen extends StatelessWidget {
       ),
     );
   }
-
-  // ─────────────────────────────────────────────
-  // CATEGORY CHIP
-  // ─────────────────────────────────────────────
 
   Widget _category(String text, bool selected) {
     return Container(
